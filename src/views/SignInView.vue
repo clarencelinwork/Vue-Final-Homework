@@ -68,7 +68,8 @@ function checkLogin() {
         },
       })
       .then((response) => {
-        isLogin.value = true
+        isLogin.value = true;
+        router.push({name: 'todo-list'});
       })
       .catch((error) => {
         isLogin.value = false
