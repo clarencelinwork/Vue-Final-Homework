@@ -12,7 +12,6 @@ const router = useRouter()
 
 const email = ref('')
 const password = ref('')
-const errorMessage = ref('')
 const isLogin = ref(false)
 
 const site = 'https://todolist-api.hexschool.io'
@@ -53,35 +52,6 @@ function submitForm() {
     })
 }
 
-function signOutButton() {
-  const token = Cookies.get('token')
-  const requestUrl = `${site}/users/sign_out`
-  axios
-    .post(requestUrl,
-      {},
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
-    )
-    .then((response) => {
-      Cookies.remove('token')
-      Cookies.remove('tokenExpired')
-      errorMessage.value = "登出成功"
-      isLogin.value = false
-    })
-    .catch((error) => {
-      if (Array.isArray(error.response.data.message)) {
-        // 如果是陣列，取得第一個元素
-        errorMessage.value = error.response.data.message[0]
-      } else {
-        // 如果不是陣列（例如是字串），就直接使用
-        errorMessage.value = error.response.data.message
-      }
-    })
-}
-
 onMounted(() => {
   checkLogin()
 });
@@ -99,17 +69,21 @@ function checkLogin() {
       })
       .then((response) => {
         isLogin.value = true
-        errorMessage.value = "登入中"
       })
       .catch((error) => {
         isLogin.value = false
+        let responseMessage = ""
         if (Array.isArray(error.response.data.message)) {
           // 如果是陣列，取得第一個元素
-          errorMessage.value = error.response.data.message[0]
+          responseMessage = error.response.data.message[0]
         } else {
           // 如果不是陣列（例如是字串），就直接使用
-          errorMessage.value = error.response.data.message
+          responseMessage = error.response.data.message
         }
+        swal.fire({
+          icon: 'error',
+          title: responseMessage,
+        });
         Cookies.remove('UID')
         Cookies.remove('token')
         Cookies.remove('tokenExpired')
@@ -138,11 +112,7 @@ function getPasswordInput(value) {
           <EmailInput @update:value="getEmailInput"/>
           <PasswordInput input-name="password" input-id="password" label-name="密碼"
                          placeholder="請輸入密碼" @update:value="getPasswordInput"/>
-          <div id="errorMessage">{{ errorMessage }}</div>
-          <button class="formControls_btnSubmit" type="button" v-on:click="signOutButton"
-                  v-if="isLogin">登出
-          </button>
-          <button class="formControls_btnSubmit" type="button" v-on:click="submitForm" v-else>登入
+          <button class="formControls_btnSubmit" type="button" v-on:click="submitForm">登入
           </button>
           <RouterLink class="formControls_btnLink" to="/sign-up">註冊帳號</RouterLink>
         </form>
@@ -152,7 +122,4 @@ function getPasswordInput(value) {
 </template>
 
 <style scoped>
-#errorMessage {
-  color: red;
-}
 </style>
