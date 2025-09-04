@@ -4,7 +4,7 @@ import SideComponent from '@/components/Side.vue'
 import EmailInput from '@/components/EmailInput.vue'
 import PasswordInput from '@/components/PasswordInput.vue'
 
-import { ref,onMounted  } from 'vue'
+import {ref, onMounted, inject} from 'vue'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
@@ -16,6 +16,8 @@ const errorMessage = ref('')
 const isLogin = ref(false)
 
 const site = 'https://todolist-api.hexschool.io'
+// inject sweetalert2
+const swal = inject('$swal');
 
 function submitForm() {
 
@@ -26,18 +28,28 @@ function submitForm() {
       password: password.value,
     })
     .then((response) => {
-      Cookies.set('token', response.data.token, { expires: 7 })
-      Cookies.set('tokenExpired', response.data.exp, { expires: 7 })
-      router.push({ name: 'todo-list' });
+      Cookies.set('token', response.data.token, {expires: 7})
+      Cookies.set('tokenExpired', response.data.exp, {expires: 7})
+      swal.fire({
+        icon: 'success',
+        title: "登入成功",
+      }).then(() => {
+        router.push({name: 'todo-list'});
+      });
     })
     .catch((error) => {
+      let responseMessage = ""
       if (Array.isArray(error.response.data.message)) {
         // 如果是陣列，取得第一個元素
-        errorMessage.value = error.response.data.message[0]
+        responseMessage = error.response.data.message[0]
       } else {
         // 如果不是陣列（例如是字串），就直接使用
-        errorMessage.value = error.response.data.message
+        responseMessage = error.response.data.message
       }
+      swal.fire({
+        icon: 'error',
+        title: responseMessage,
+      });
     })
 }
 
