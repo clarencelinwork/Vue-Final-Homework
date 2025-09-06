@@ -1,12 +1,12 @@
 <script setup>
-import { useRouter,RouterLink } from 'vue-router'
-import { ref, onMounted, computed } from 'vue'
+import {useRouter, RouterLink} from 'vue-router'
+import {ref, onMounted, computed} from 'vue'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
 const router = useRouter()
 
-const nickname =ref('')
+const nickname = ref('')
 
 const currentType = ref('全部')
 const newTodo = ref('')
@@ -64,33 +64,33 @@ function addTodo() {
   const token = Cookies.get('token')
   const requestUrl = `${site}/todos`
 
-  const tempNewTodo=newTodo.value.trim()
-  if(tempNewTodo.length!==0){
+  const tempNewTodo = newTodo.value.trim()
+  if (tempNewTodo.length !== 0) {
     axios
-    .post(requestUrl, 
-    {
-      content: newTodo.value,
-    },
-      {
-        headers: {
-          Authorization: token,
+      .post(requestUrl,
+        {
+          content: newTodo.value,
         },
-      }
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       )
-    .then((response) => {
-      if (response.data.status === true){
-        const newTodoItem = response.data.newTodo
-        // 使用 push() 方法將新項目加入陣列尾部
-        todoListData.value.push(newTodoItem)
-        showTodoListData.value=todoListData.value
-        newTodo.value = ''
-        updateCount()
-      }
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-  }else{
+      .then((response) => {
+        if (response.data.status === true) {
+          const newTodoItem = response.data.newTodo
+          // 使用 push() 方法將新項目加入陣列尾部
+          todoListData.value.push(newTodoItem)
+          showTodoListData.value = todoListData.value
+          newTodo.value = ''
+          updateCount()
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  } else {
     alert("請輸入待辦事項")
   }
 }
@@ -99,17 +99,17 @@ function removeItem(id) {
   const token = Cookies.get('token')
   const requestUrl = `${site}/todos/${id}`
   axios
-    .delete(requestUrl, 
+    .delete(requestUrl,
       {
         headers: {
           Authorization: token,
         },
       }
-      )
+    )
     .then((response) => {
-      if (response.data.status === true){
+      if (response.data.status === true) {
         todoListData.value = todoListData.value.filter((item) => item.id !== id)
-        showTodoListData.value=todoListData.value
+        showTodoListData.value = todoListData.value
         updateCount()
       }
     })
@@ -122,16 +122,16 @@ function checkItem(id) {
   const token = Cookies.get('token')
   const requestUrl = `${site}/todos/${id}/toggle`
   axios
-    .patch(requestUrl, 
-    {}  
-    ,{
+    .patch(requestUrl,
+      {}
+      , {
         headers: {
           Authorization: token,
         },
       }
-      )
+    )
     .then((response) => {
-      if (response.data.status === true){
+      if (response.data.status === true) {
         let todoListItem = todoListData.value.find(item => item.id === id);
         todoListItem.status = !todoListItem.status
         updateCount()
@@ -154,78 +154,78 @@ function _uuid() {
   })
 }
 
-function checkLogin(){
+function checkLogin() {
   const token = Cookies.get('token')
-  if (token !== undefined){
-      const requestUrl = `${site}/users/checkout`
+  if (token !== undefined) {
+    const requestUrl = `${site}/users/checkout`
 
-      axios
-        .get(requestUrl, {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((response) => {
-          isLogin.value = true
-          if(response.data.status===false){
-            Cookies.remove('UID')
-            Cookies.remove('token')
-            Cookies.remove('tokenExpired')
-            router.push({ name: 'sign-in' });
-          }else{
-            nickname.value=response.data.nickname
-          }
-        })
-        .catch((error) => {
-          isLogin.value = false
-          if (Array.isArray(error.response.data.message)) {
-            // 如果是陣列，取得第一個元素
-            errorMessage.value = error.response.data.message[0]
-          } else {
-            // 如果不是陣列（例如是字串），就直接使用
-            errorMessage.value = error.response.data.message
-          }
+    axios
+      .get(requestUrl, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((response) => {
+        isLogin.value = true
+        if (response.data.status === false) {
           Cookies.remove('UID')
           Cookies.remove('token')
           Cookies.remove('tokenExpired')
-        })
+          router.push({name: 'sign-in'});
+        } else {
+          nickname.value = response.data.nickname
+        }
+      })
+      .catch((error) => {
+        isLogin.value = false
+        if (Array.isArray(error.response.data.message)) {
+          // 如果是陣列，取得第一個元素
+          errorMessage.value = error.response.data.message[0]
+        } else {
+          // 如果不是陣列（例如是字串），就直接使用
+          errorMessage.value = error.response.data.message
+        }
+        Cookies.remove('UID')
+        Cookies.remove('token')
+        Cookies.remove('tokenExpired')
+      })
   }
 }
 
-function getTodos(){
+function getTodos() {
   const requestUrl = `${site}/todos`
   const token = Cookies.get('token')
 
   axios
-        .get(requestUrl, {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then((response) => {
-          todoListData.value=response.data.data
-          showTodoListData.value=todoListData.value
-          updateCount()
-        })
+    .get(requestUrl, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((response) => {
+      todoListData.value = response.data.data
+      showTodoListData.value = todoListData.value
+      updateCount()
+    })
 }
 
-function signOutButton(){
+function signOutButton() {
   const token = Cookies.get('token')
   const requestUrl = `${site}/users/sign_out`
   axios
-    .post(requestUrl, 
-    {},
+    .post(requestUrl,
+      {},
       {
         headers: {
           Authorization: token,
         },
       }
-      )
+    )
     .then((response) => {
       Cookies.remove('token')
       Cookies.remove('tokenExpired')
       isLogin.value = false
-      router.push({ name: 'sign-in' });
+      router.push({name: 'sign-in'});
     })
     .catch((error) => {
       if (Array.isArray(error.response.data.message)) {
@@ -253,7 +253,7 @@ function signOutButton(){
     <div class="conatiner todoListPage vhContainer">
       <div class="todoList_Content">
         <div class="inputBox">
-          <input type="text" placeholder="請輸入待辦事項" v-model="newTodo" />
+          <input type="text" placeholder="請輸入待辦事項" v-model="newTodo"/>
           <a href="#" @click="addTodo()">
             <i class="fa fa-plus"></i>
           </a>
@@ -262,7 +262,7 @@ function signOutButton(){
           <ul class="todoList_tab">
             <li>
               <a href="#" :class="{ active: currentType === '全部' }" @click="changeType('全部')"
-                >全部</a
+              >全部</a
               >
             </li>
             <li>
@@ -270,7 +270,7 @@ function signOutButton(){
                 href="#"
                 :class="{ active: currentType === '待完成' }"
                 @click="changeType('待完成')"
-                >待完成</a
+              >待完成</a
               >
             </li>
             <li>
@@ -278,7 +278,7 @@ function signOutButton(){
                 href="#"
                 :class="{ active: currentType === '已完成' }"
                 @click="changeType('已完成')"
-                >已完成</a
+              >已完成</a
               >
             </li>
           </ul>
