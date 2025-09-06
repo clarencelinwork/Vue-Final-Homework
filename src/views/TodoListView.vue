@@ -150,7 +150,7 @@ function removeItem(id) {
     })
 }
 
-function checkItem(id) {
+function toggleItem(id) {
   const token = Cookies.get('token')
   const requestUrl = `${site}/todos/${id}/toggle`
   axios
@@ -330,7 +330,7 @@ function signOutButton() {
                     type="checkbox"
                     value="todoList.value"
                     :checked="todoList.status"
-                    @click="checkItem(todoList.id)"
+                    @click="toggleItem(todoList.id)"
                   />
                   <span>{{ todoList.content }}</span>
                 </label>
