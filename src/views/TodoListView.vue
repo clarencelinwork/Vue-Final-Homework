@@ -189,6 +189,8 @@ function checkLogin() {
         Cookies.remove('token')
         Cookies.remove('tokenExpired')
       })
+  } else {
+    router.push({name: 'sign-in'});
   }
 }
 
