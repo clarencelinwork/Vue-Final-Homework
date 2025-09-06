@@ -166,6 +166,14 @@ function toggleItem(id) {
       if (response.data.status === true) {
         let todoListItem = todoListData.value.find(item => item.id === id);
         todoListItem.status = !todoListItem.status
+        // 根據狀態取得不同的顯示資料
+        if (currentType.value === "全部") {
+          showTodoListData.value = todoListData.value
+        } else if (currentType.value === "待完成") {
+          showTodoListData.value = unFinishedTodoList.value
+        } else if (currentType.value === "已完成") {
+          showTodoListData.value = finishedTodoList.value
+        }
         updateCount()
       }
     })
