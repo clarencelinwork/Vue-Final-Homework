@@ -85,13 +85,27 @@ function addTodo() {
           showTodoListData.value = todoListData.value
           newTodo.value = ''
           updateCount()
+          swal.fire({
+            position: "top-end",
+            title: "新增待辦事項成功",
+            showConfirmButton: false,
+            timer: 1000
+          });
         }
       })
       .catch((error) => {
-        console.log(error)
+        swal.fire({
+          position: "top-end",
+          title: "新增待辦事項失敗",
+          showConfirmButton: false,
+          timer: 1000
+        });
       })
   } else {
-    alert("請輸入待辦事項")
+    swal.fire({
+      icon: 'info',
+      title: "請輸入待辦事項",
+    });
   }
 }
 
@@ -111,10 +125,21 @@ function removeItem(id) {
         todoListData.value = todoListData.value.filter((item) => item.id !== id)
         showTodoListData.value = todoListData.value
         updateCount()
+        swal.fire({
+          position: "top-end",
+          title: "移除待辦事項成功",
+          showConfirmButton: false,
+          timer: 1000
+        });
       }
     })
-    .catch((error) => {
-      console.log(error)
+    .catch(() => {
+      swal.fire({
+        position: "top-end",
+        title: "移除待辦事項失敗",
+        showConfirmButton: false,
+        timer: 1000
+      });
     })
 }
 
@@ -137,8 +162,13 @@ function checkItem(id) {
         updateCount()
       }
     })
-    .catch((error) => {
-      console.log(error)
+    .catch(() => {
+      swal.fire({
+        position: "top-end",
+        title: "取得待辦事項失敗",
+        showConfirmButton: false,
+        timer: 1000
+      });
     })
 }
 
