@@ -172,7 +172,7 @@ function checkItem(id) {
     .catch(() => {
       swal.fire({
         position: "top-end",
-        title: "取得待辦事項失敗",
+        title: "變更待辦事項失敗",
         showConfirmButton: false,
         timer: 1000
       });
