@@ -123,7 +123,7 @@ function removeItem(id) {
     .then((response) => {
       if (response.data.status === true) {
         todoListData.value = todoListData.value.filter((item) => item.id !== id)
-        showTodoListData.value = todoListData.value
+        showTodoListData.value = showTodoListData.value.filter((item) => item.id !== id)
         updateCount()
         swal.fire({
           position: "top-end",
