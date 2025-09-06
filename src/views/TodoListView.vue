@@ -314,7 +314,7 @@ function signOutButton() {
               >
             </li>
           </ul>
-          <div class="todoList_items">
+          <div class="todoList_items" v-if="showTodoListData.length">
             <ul class="todoList_item" v-for="todoList in showTodoListData" :key="todoList.id">
               <li>
                 <label class="todoList_label">
@@ -336,6 +336,9 @@ function signOutButton() {
               <p v-if="currentType === '已完成'">{{ todoListFinishCount }} 個已完成項目</p>
               <p v-else>{{ todoListUnFinishCount }} 個待完成項目</p>
             </div>
+          </div>
+          <div class="todoList_items" v-else-if="currentType === '全部'">
+            <p>目前尚無待辦事項</p>
           </div>
         </div>
       </div>
