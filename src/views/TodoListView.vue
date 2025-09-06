@@ -1,6 +1,6 @@
 <script setup>
 import {useRouter, RouterLink} from 'vue-router'
-import {ref, onMounted, computed} from 'vue'
+import {ref, onMounted, computed, inject} from 'vue'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
@@ -21,10 +21,11 @@ const site = 'https://todolist-api.hexschool.io'
 const todoListCount = ref(0)
 const todoListFinishCount = ref(0)
 const todoListUnFinishCount = ref(0)
+// inject sweetalert2
+const swal = inject('$swal');
 
 onMounted(() => {
   checkLogin()
-  getTodos()
 })
 
 function updateCount() {
@@ -165,26 +166,26 @@ function checkLogin() {
           Authorization: token,
         },
       })
-      .then((response) => {
-        isLogin.value = true
-        if (response.data.status === false) {
-          Cookies.remove('UID')
-          Cookies.remove('token')
-          Cookies.remove('tokenExpired')
-          router.push({name: 'sign-in'});
-        } else {
-          nickname.value = response.data.nickname
-        }
+      .then(() => {
+        isLogin.value = true;
+        getTodos();
       })
       .catch((error) => {
-        isLogin.value = false
+        isLogin.value = false;
+        let responseMessage
         if (Array.isArray(error.response.data.message)) {
           // 如果是陣列，取得第一個元素
-          errorMessage.value = error.response.data.message[0]
+          responseMessage = error.response.data.message[0]
         } else {
           // 如果不是陣列（例如是字串），就直接使用
-          errorMessage.value = error.response.data.message
+          responseMessage = error.response.data.message
         }
+        swal.fire({
+          icon: 'error',
+          title: responseMessage,
+        }).then(() => {
+          router.push({name: 'sign-in'});
+        });
         Cookies.remove('UID')
         Cookies.remove('token')
         Cookies.remove('tokenExpired')
@@ -230,13 +231,20 @@ function signOutButton() {
       router.push({name: 'sign-in'});
     })
     .catch((error) => {
+      let responseMessage
       if (Array.isArray(error.response.data.message)) {
         // 如果是陣列，取得第一個元素
-        errorMessage.value = error.response.data.message[0]
+        responseMessage = error.response.data.message[0]
       } else {
         // 如果不是陣列（例如是字串），就直接使用
-        errorMessage.value = error.response.data.message
+        responseMessage = error.response.data.message
       }
+      swal.fire({
+        icon: 'error',
+        title: responseMessage,
+      }).then(() => {
+        router.push({name: 'sign-in'});
+      });
     })
 }
 </script>
