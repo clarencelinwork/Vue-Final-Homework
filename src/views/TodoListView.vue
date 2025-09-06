@@ -83,11 +83,11 @@ function addTodo() {
           // 使用 push() 方法將新項目加入陣列尾部
           todoListData.value.push(newTodoItem)
           // 根據狀態取得不同的顯示資料
-          if (currentType === "全部") {
+          if (currentType.value === "全部") {
             showTodoListData.value = todoListData.value
-          } else if (currentType === "待完成") {
+          } else if (currentType.value === "待完成") {
             showTodoListData.value = unFinishedTodoList.value
-          } else if (currentType === "已完成") {
+          } else if (currentType.value === "已完成") {
             showTodoListData.value = finishedTodoList.value
           }
           newTodo.value = ''
