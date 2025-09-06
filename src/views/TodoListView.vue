@@ -153,8 +153,16 @@ function checkLogin() {
           Authorization: token,
         },
       })
-      .then(() => {
-        getTodos();
+      .then((response) => {
+        if (response.data.status === false) {
+          Cookies.remove('UID')
+          Cookies.remove('token')
+          Cookies.remove('tokenExpired')
+          router.push({name: 'sign-in'});
+        } else {
+          nickname.value = response.data.nickname
+          getTodos();
+        }
       })
       .catch((error) => {
         let responseMessage
