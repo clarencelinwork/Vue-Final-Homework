@@ -83,13 +83,7 @@ function addTodo() {
           // 使用 push() 方法將新項目加入陣列尾部
           todoListData.value.push(newTodoItem)
           // 根據狀態取得不同的顯示資料
-          if (currentType.value === "全部") {
-            showTodoListData.value = todoListData.value
-          } else if (currentType.value === "待完成") {
-            showTodoListData.value = unFinishedTodoList.value
-          } else if (currentType.value === "已完成") {
-            showTodoListData.value = finishedTodoList.value
-          }
+          updateShowTodoList()
           newTodo.value = ''
           updateCount()
           swal.fire({
@@ -167,13 +161,7 @@ function toggleItem(id) {
         let todoListItem = todoListData.value.find(item => item.id === id);
         todoListItem.status = !todoListItem.status
         // 根據狀態取得不同的顯示資料
-        if (currentType.value === "全部") {
-          showTodoListData.value = todoListData.value
-        } else if (currentType.value === "待完成") {
-          showTodoListData.value = unFinishedTodoList.value
-        } else if (currentType.value === "已完成") {
-          showTodoListData.value = finishedTodoList.value
-        }
+        updateShowTodoList()
         updateCount()
       }
     })
@@ -284,6 +272,21 @@ function signOutButton() {
       });
     })
 }
+
+/*
+ * 根據狀態取得不同的顯示資料
+ */
+function updateShowTodoList() {
+  // 根據狀態取得不同的顯示資料
+  if (currentType.value === "全部") {
+    showTodoListData.value = todoListData.value
+  } else if (currentType.value === "待完成") {
+    showTodoListData.value = unFinishedTodoList.value
+  } else if (currentType.value === "已完成") {
+    showTodoListData.value = finishedTodoList.value
+  }
+}
+
 </script>
 
 <template>
