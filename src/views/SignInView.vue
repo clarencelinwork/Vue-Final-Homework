@@ -37,7 +37,7 @@ function submitForm() {
       });
     })
     .catch((error) => {
-      let responseMessage = ""
+      let responseMessage;
       if (Array.isArray(error.response.data.message)) {
         // 如果是陣列，取得第一個元素
         responseMessage = error.response.data.message[0]
@@ -67,13 +67,13 @@ function checkLogin() {
           Authorization: token,
         },
       })
-      .then((response) => {
+      .then(() => {
         isLogin.value = true;
         router.push({name: 'todo-list'});
       })
       .catch((error) => {
         isLogin.value = false
-        let responseMessage = ""
+        let responseMessage
         if (Array.isArray(error.response.data.message)) {
           // 如果是陣列，取得第一個元素
           responseMessage = error.response.data.message[0]
