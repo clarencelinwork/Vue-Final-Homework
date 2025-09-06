@@ -333,8 +333,8 @@ function signOutButton() {
               </li>
             </ul>
             <div class="todoList_statistics">
-              <p v-if="currentType === '待完成'">{{ todoListUnFinishCount }} 個待完成項目</p>
-              <p v-else>{{ todoListFinishCount }} 個已完成項目</p>
+              <p v-if="currentType === '已完成'">{{ todoListFinishCount }} 個已完成項目</p>
+              <p v-else>{{ todoListUnFinishCount }} 個待完成項目</p>
             </div>
           </div>
         </div>
