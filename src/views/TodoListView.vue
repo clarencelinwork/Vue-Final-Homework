@@ -12,7 +12,6 @@ const currentType = ref('全部')
 const newTodo = ref('')
 
 const showTodoListData = ref([])
-const isLogin = ref(false)
 
 const todoListData = ref([])
 
@@ -167,11 +166,9 @@ function checkLogin() {
         },
       })
       .then(() => {
-        isLogin.value = true;
         getTodos();
       })
       .catch((error) => {
-        isLogin.value = false;
         let responseMessage
         if (Array.isArray(error.response.data.message)) {
           // 如果是陣列，取得第一個元素
@@ -227,7 +224,6 @@ function signOutButton() {
     .then((response) => {
       Cookies.remove('token')
       Cookies.remove('tokenExpired')
-      isLogin.value = false
       router.push({name: 'sign-in'});
     })
     .catch((error) => {
